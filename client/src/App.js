@@ -21,7 +21,6 @@ const styles = theme => ({
   }
 })
 
-// 고객 더미 데이터 
 const customers = [
   {
   'id': 1,
