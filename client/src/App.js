@@ -8,12 +8,12 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import {withStyles} from '@material-ui/core/styles'
-//import React, { Component } from 'react';
+import React, { Component } from 'react';
 
 const styles = theme => ({
   root: {
   width:"100%",
-  //marginTop: theme.spacing.unit * 3,
+  marginTop: theme.spacing.unit * 3,
   overflowX : "auto"
   }, 
   table: {
@@ -21,35 +21,26 @@ const styles = theme => ({
   }
 })
 
-const customers = [
-  {
-  'id': 1,
-  'image': 'https://placeimg.com/64/64/1',
-  'name': '방예랑',
-  'birthday': '800518',
-  'gender': '남자',
-  'job': '대학생'
-}, 
-{
-  'id': 2,
-  'image': 'https://placeimg.com/64/64/2',
-  'name': '김은주',
-  'birthday': '800518',
-  'gender': '남자',
-  'job': '대학생'
-}, 
-{
-  'id': 3,
-  'image': 'https://placeimg.com/64/64/3',
-  'name': '방민석',
-  'birthday': '800518',
-  'gender': '남자',
-  'job': '대학생'
-}
-]
 
-function App() {  
-  //const { classes } = this.props;
+class App extends Component {
+
+  state = {
+    customers: ""
+  }
+
+  componentDidMount() {
+    this.callApi()
+    .then(res => this.setState({customers: res}))
+    .catch(err => console.log(err));
+  }
+
+  callApi = async() => {
+    const response = await fetch('/api/customers');
+    const body =  await response.json();
+    return body;
+  }
+render(){
+  const { classes } = this.props;
   return (    
     <Paper className={styles.root}>
       <Table className={styles.table}>
@@ -65,7 +56,7 @@ function App() {
         </TableHead>
         <TableBody>
         {
-          customers.map(c=> {
+          this.state.customers ? this.state.customers.map(c=> {
             return (
               <Customer 
               key={c.id}
@@ -77,13 +68,14 @@ function App() {
               job={c.job}
               />
               )
-            }
-          )
+            } 
+          ): "" 
         }
         </TableBody>
       </Table>
     </Paper>
   );
+      }
 }
 
 // class App extends Component {
